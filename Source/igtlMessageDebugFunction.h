@@ -16,15 +16,16 @@
 #define __igltMessageDebugFunction_h
 
 #define ABS_ERROR 1e-6
+#include <iostream>
 
 void TestDebugCharArrayCmp(void* inputPointer, unsigned char* inputArray, int size)
 {
   for (int i = 0 ; i< size;++i)
   {
-    std::cerr<<i<<"  "<<+((igtlUint8*)inputPointer)[i]<<"  "<<+inputArray[i]<<" "<<((igtlUint8*)inputPointer)[i]<<"  "<<inputArray[i];
-    if (((igtlUint8*)inputPointer)[i] != inputArray[i])
+    std::cerr<<i<<"  "<<+((unsigned char *)inputPointer)[i]<<"  "<<+inputArray[i]<<" "<<((unsigned char*)inputPointer)[i]<<"  "<<inputArray[i];
+    if (((unsigned char*)inputPointer)[i] != inputArray[i])
     {
-      std::cerr<<"    "<<+((igtlUint8*)inputPointer)[i]<<"  "<<+inputArray[i];
+      std::cerr<<"    "<<+((unsigned char*)inputPointer)[i]<<"  "<<+inputArray[i];
     }
     std::cerr<<std::endl;
   }

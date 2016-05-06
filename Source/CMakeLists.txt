@@ -59,6 +59,7 @@ SET(OpenIGTLink_SOURCES
   igtlStatusMessage.cxx
   igtlTimeStamp.cxx
   igtlTransformMessage.cxx
+
   )
 
 SET(OpenIGTLink_INCLUDE_FILES
@@ -123,6 +124,8 @@ IF (${OpenIGTLink_PROTOCOL_VERSION} GREATER "1" )
     igtlutil/igtl_bind.c
     igtlutil/igtl_qtrans.c
     igtlutil/igtl_polydata.c
+    igtlutil/igtl_video.c
+    igtlVideoMessage.cxx
     igtlColorTableMessage.cxx
     igtlImageMetaMessage.cxx
     igtlLabelMetaMessage.cxx
@@ -153,6 +156,8 @@ IF (${OpenIGTLink_PROTOCOL_VERSION} GREATER "1" )
     igtlutil/igtl_bind.h
     igtlutil/igtl_qtrans.h
     igtlutil/igtl_polydata.h
+    igtlutil/igtl_video.h
+    igtlVideoMessage.h
     igtlColorTableMessage.h
     igtlImageMetaMessage.h
     igtlLabelMetaMessage.h

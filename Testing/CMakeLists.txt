@@ -1,5 +1,4 @@
 ADD_SUBDIRECTORY( igtlutil )
-
 find_package(OpenIGTLink REQUIRED)
 include(${OpenIGTLink_USE_FILE})
 message(${CMAKE_SYSTEM_NAME})
@@ -9,12 +8,18 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND (NOT(CMAKE_CXX_FLAGS MATCHES "/MD"))
 endif(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND (NOT(CMAKE_CXX_FLAGS MATCHES "/MD")))
   # Download and unpack googletest at configure time
 message(${CMAKE_CXX_FLAGS})
-configure_file(CMakeLists.txt.in
+configure_file(CMakeListsGoogleTest.txt.in
                googletest-download/CMakeLists.txt)
+configure_file(CMakeListsOpenH264.txt.in
+               OpenH264-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}".
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/googletest-download )
 execute_process(COMMAND ${CMAKE_COMMAND} --build .
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/googletest-download )
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}".
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/OpenH264-download )
+execute_process(COMMAND ${CMAKE_COMMAND} --build .
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/Testing/OpenH264-download )
 # Prevent GoogleTest from overriding our compiler/linker options
 # when building with Visual Studio
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -24,12 +29,22 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 # and gmock_main
 add_subdirectory(${CMAKE_BINARY_DIR}/Testing/gmock
                  ${CMAKE_BINARY_DIR}/Testing/gmock-build)				 
+# Add OpenH264 directly to our build.
+#add_subdirectory(${CMAKE_BINARY_DIR}/Testing/OpenH264)
+include_directories("${CMAKE_BINARY_DIR}/Testing/OpenH264/codec")
+include_directories("${CMAKE_BINARY_DIR}/Testing/OpenH264/res")
+include_directories("${CMAKE_BINARY_DIR}/Testing/OpenH264/test")
 
 # The gtest/gmock targets carry header search path
 # dependencies automatically when using CMake 2.8.11 or
 # later. Otherwise we have to add them here ourselves.
 include_directories("${gtest_SOURCE_DIR}/include")
 include_directories("${gmock_SOURCE_DIR}/include")
+
+LINK_DIRECTORIES("${CMAKE_BINARY_DIR}/Testing/OpenH264")
+
+ADD_EXECUTABLE(VideoDataClient   VideoDataClient.cxx)
+ADD_EXECUTABLE(VideoDataServer   VideoDataServer.cxx)
 
 ADD_EXECUTABLE(igtlSocketTest   igtlSocketTest.cxx)
 ADD_EXECUTABLE(igtlMultiThreaderTest1   igtlMultiThreaderTest1.cxx)
@@ -87,7 +102,8 @@ TARGET_LINK_LIBRARIES(igtlStringMessageTest OpenIGTLink gtest_main gtest gmock_m
 TARGET_LINK_LIBRARIES(igtlTrackingDataMessageTest OpenIGTLink gtest_main gtest gmock_main gmock)
 TARGET_LINK_LIBRARIES(igtlTrajectoryMessageTest OpenIGTLink gtest_main gtest gmock_main gmock)
 TARGET_LINK_LIBRARIES(igtlTransformMessageTest OpenIGTLink gtest_main gtest gmock_main gmock)
-
+TARGET_LINK_LIBRARIES(VideoDataClient OpenIGTLink openH264)
+TARGET_LINK_LIBRARIES(VideoDataServer OpenIGTLink openH264)
 
 ADD_TEST(igtlSocketTest ${OpenIGTLink_EXECUTABLE_PATH}/igtlSocketTest)
 ADD_TEST(igtlMultiThreaderTest1 ${OpenIGTLink_EXECUTABLE_PATH}/igtlMultiThreaderTest1)
