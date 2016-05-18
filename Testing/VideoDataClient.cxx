@@ -37,13 +37,14 @@ int main(int argc, char* argv[])
   //------------------------------------------------------------
   // Parse Arguments
 
-  if (argc != 4) // check number of arguments
+  if (argc != 5) // check number of arguments
     {
     // If not correct, print usage
     std::cerr << "Usage: " << argv[0] << " <hostname> <port> <fps>"    << std::endl;
     std::cerr << "    <hostname> : IP or host name"                    << std::endl;
     std::cerr << "    <port>     : Port # (18944 in Slicer default)"   << std::endl;
     std::cerr << "    <fps>      : Frequency (fps) to send frame" << std::endl;
+    std::cerr << "    <useCompress>   : 1 for use compress, 0 for not use compress" << std::endl;
     exit(0);
     }
 
@@ -51,7 +52,7 @@ int main(int argc, char* argv[])
   int    port     = atoi(argv[2]);
   double fps      = atof(argv[3]);
   int    interval = (int) (1000.0 / fps);
-  
+  bool    useCompress = atoi(argv[4]);
   
   ISVCDecoder* decoder_;
   WelsCreateDecoder (&decoder_);
@@ -97,6 +98,7 @@ int main(int argc, char* argv[])
   startVideoMsg = igtl::StartVideoDataMessage::New();
   startVideoMsg->SetDeviceName("Video Client");
   startVideoMsg->SetResolution(interval);
+  startVideoMsg->SetUseCompress(interval);
   startVideoMsg->Pack();
   socket->Send(startVideoMsg->GetPackPointer(), startVideoMsg->GetPackSize());
   int loop = 0;

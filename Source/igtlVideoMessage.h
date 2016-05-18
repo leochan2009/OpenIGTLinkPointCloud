@@ -44,6 +44,8 @@ public:
   
   /// Gets the time resolution for streaming of QTDATA messages
   igtlInt32    GetResolution()               { return this->m_Resolution; };
+  
+  void    SetUseCompress(bool useCompress) { this->m_UseCompress = useCompress; };
   igtlInt32    GetUseCompress()               { return this->m_UseCompress; };
   
 protected:
