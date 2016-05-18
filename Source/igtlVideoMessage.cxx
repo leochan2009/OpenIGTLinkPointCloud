@@ -36,6 +36,7 @@ int StartVideoDataMessage::PackBody()
   igtl_stt_video* stt_video = (igtl_stt_video*)this->m_Body;
   
   stt_video->resolution = this->m_Resolution;
+  stt_video->useCompress = this->m_UseCompress;
   
   igtl_stt_video_convert_byte_order(stt_video);
   
@@ -51,6 +52,7 @@ int StartVideoDataMessage::UnpackBody()
   igtl_stt_video_convert_byte_order(stt_video);
   
   this->m_Resolution = stt_video->resolution;
+  this->m_UseCompress = stt_video->useCompress;
   return 1;
 }
 
@@ -97,7 +99,10 @@ VideoMessage::~VideoMessage()
   {
     delete [] this->m_Frame;
   }
-  
+  if(this->m_Body)
+  {
+    delete [] this->m_Body;
+  }
 }
 
 void VideoMessage::AllocateScalars()

@@ -44,6 +44,7 @@ public:
   
   /// Gets the time resolution for streaming of QTDATA messages
   igtlInt32    GetResolution()               { return this->m_Resolution; };
+  igtlInt32    GetUseCompress()               { return this->m_UseCompress; };
   
 protected:
   StartVideoDataMessage() : MessageBase() { this->m_DefaultBodyType  = "STT_VIDEO"; };
@@ -58,6 +59,7 @@ protected:
   
   /// Minimum time between two frames (ms). Use 0 for as fast as possible.
   igtlInt32     m_Resolution;
+  bool m_UseCompress;
   
 };
   

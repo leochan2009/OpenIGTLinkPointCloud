@@ -19,7 +19,7 @@
 #include "igtl_util.h"
 #include "igtl_types.h"
 
-#define  IGTL_STT_VIDEO_SIZE               4
+#define  IGTL_STT_VIDEO_SIZE               5
 #define IGTL_VIDEO_HEADER_VERSION         1
 #define IGTL_VIDEO_HEADER_SIZE          72
 
@@ -50,6 +50,7 @@ extern "C" {
 typedef struct {
   igtl_int32   resolution;     /* Minimum time between two frames. Use 0 for as fast as possible. */
                                /* If e.g. 50 ms is specified, the maximum update rate will be 20 Hz. */
+  igtl_int8 useCompress;
 } igtl_stt_video;
   
 #pragma pack()

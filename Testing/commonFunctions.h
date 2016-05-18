@@ -91,8 +91,8 @@ void H264DecodeInstance (ISVCDecoder* pDecoder, unsigned char* kpH264BitStream, 
       fprintf (stderr, "Can not open yuv file to output result of decoding..\n");
       // any options
       //return; // can let decoder work in quiet mode, no writing any output
-    } else
-      fprintf (stderr, "Sequence output file name: %s..\n", kpOuputFileName);
+    } //else
+      //fprintf (stderr, "Sequence output file name: %s..\n", kpOuputFileName);
   } else {
     fprintf (stderr, "Can not find any output file to write..\n");
     // any options
@@ -227,10 +227,10 @@ void H264DecodeInstance (ISVCDecoder* pDecoder, unsigned char* kpH264BitStream, 
     }
 #endif
     dElapsed = iTotal / 1e6;
-    fprintf (stderr, "-------------------------------------------------------\n");
+    /*fprintf (stderr, "-------------------------------------------------------\n");
     fprintf (stderr, "iWidth:\t\t%d\nheight:\t\t%d\nFrames:\t\t%d\ndecode time:\t%f sec\nFPS:\t\t%f fps\n",
              iWidth, iHeight, iFrameCount, dElapsed, (iFrameCount * 1.0) / dElapsed);
-    fprintf (stderr, "-------------------------------------------------------\n");
+    fprintf (stderr, "-------------------------------------------------------\n");*/
     iBufPos += iSliceSize;
     ++ iSliceIndex;
   }

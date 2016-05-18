@@ -226,6 +226,7 @@ void EncFileParamToParamExt (EncodeFileParam* pEncFileParam, SEncParamExt* pEnxP
     }
   }
   pEnxParamExt->iTargetBitrate *= pEnxParamExt->iSpatialLayerNum;
+  pEnxParamExt->bEnableFrameSkip = true;
 }
 
 static EncodeFileParam kFileParamArray =
@@ -326,9 +327,9 @@ void* ThreadFunction(void* ptr)
       {
         pic.uiTimeStamp = (long long)(iFrameIdx * (1000 / pEncParamExt.fMaxFrameRate));
         iFrameIdx++;
-        TestDebugCharArrayCmp(pic.pData[0], pic.pData[0], 200);
+        //TestDebugCharArrayCmp(pic.pData[0], pic.pData[0], 200);
         int rv = encoder_->EncodeFrame (&pic, &info);
-        TestDebugCharArrayCmp(info.sLayerInfo[0].pBsBuf, info.sLayerInfo[0].pBsBuf, 200);
+        //TestDebugCharArrayCmp(info.sLayerInfo[0].pBsBuf, info.sLayerInfo[0].pBsBuf, 200);
         if(rv == cmResultSuccess)
         {
           // 1. contain SHA encryption, could be removed, 2. contain the digest message could be as CRC
@@ -353,15 +354,15 @@ void* ThreadFunction(void* ptr)
               frameSize += layerInfo.pNalLengthInByte[j];
               layerSize += layerInfo.pNalLengthInByte[j];
             }
-            TestDebugCharArrayCmp(layerInfo.pBsBuf, layerInfo.pBsBuf, layerSize<200? layerSize:200);
+            //TestDebugCharArrayCmp(layerInfo.pBsBuf, layerInfo.pBsBuf, layerSize<200? layerSize:200);
             for (int i = 0; i < layerSize ; i++)
             {
               videoMsg->GetPackFragmentPointer(2)[frameSize-layerSize+i] = layerInfo.pBsBuf[i];
             }
             fwrite (layerInfo.pBsBuf, 1, layerSize, pFpBs); // write pure bit stream into file
           }
-          std::cerr<<"line break"<<std::endl;
-          TestDebugCharArrayCmp(videoMsg->GetPackFragmentPointer(2), videoMsg->GetPackFragmentPointer(1) + IGTL_VIDEO_HEADER_SIZE, 200);
+          //std::cerr<<"line break"<<std::endl;
+          //TestDebugCharArrayCmp(videoMsg->GetPackFragmentPointer(2), videoMsg->GetPackFragmentPointer(1) + IGTL_VIDEO_HEADER_SIZE, 200);
           videoMsg->Pack();
           glock->Lock();
           

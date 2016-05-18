@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
       std::cerr << "Receiving : " << headerMsg->GetDeviceType() << std::endl;
       socket->Skip(headerMsg->GetBodySizeToRead(), 0);
     }
-    if (++loop >= 16) // if received 16 times
+    if (++loop >= 1000) // if received 16 times
     {
       //------------------------------------------------------------
       // Ask the server to stop pushing tracking data
