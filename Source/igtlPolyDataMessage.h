@@ -48,6 +48,28 @@ protected:
 };
 
 
+/// A class for the GET_POLYDATA message type.
+class IGTLCommon_EXPORT StopPolyDataMessage : public MessageBase
+{
+public:
+  typedef StopPolyDataMessage            Self;
+  typedef MessageBase                   Superclass;
+  typedef SmartPointer<Self>            Pointer;
+  typedef SmartPointer<const Self>      ConstPointer;
+
+  igtlTypeMacro(igtl::StopPolyDataMessage, igtl::MessageBase);
+  igtlNewMacro(igtl::StopPolyDataMessage);
+
+protected:
+  StopPolyDataMessage();
+  ~StopPolyDataMessage() {};
+protected:
+  virtual int  GetBodyPackSize() { return 0; };
+  virtual int  PackBody() { AllocatePack(); return 1; };
+  virtual int  UnpackBody() { return 1; };
+};
+
+
 // A class to manage a point array.
 class IGTLCommon_EXPORT PolyDataPointArray : public Object {
 

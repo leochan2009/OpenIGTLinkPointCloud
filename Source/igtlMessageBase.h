@@ -72,7 +72,10 @@ public:
   };
 
 public:
+  /// A character string for the default device type (message type).
+  std::string    m_DefaultBodyType;
 
+  void SetDefaultBodyType(const char* DeviceName) { m_DefaultBodyType = DeviceName; };
   /// Sets the message version number
   void  SetVersion(unsigned short version);
 
@@ -209,9 +212,6 @@ protected:
   /// The size of the body to be read. This function must be called
   /// after the message header is set.
   int            m_BodySizeToRead;
-
-  /// A character string for the default device type (message type).
-  std::string    m_DefaultBodyType;
 
   /// A character string for the device type (message type). This will be used when the header
   /// is deserialized from a byte stream received from the network.

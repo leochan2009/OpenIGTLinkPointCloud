@@ -879,6 +879,11 @@ GetPolyDataMessage::GetPolyDataMessage()
   this->m_DefaultBodyType  = "GET_POLYDATA";
 }
 
+StopPolyDataMessage::StopPolyDataMessage()
+{
+  this->m_DefaultBodyType = "STOP_POLYDATA";
+}
+
 } // namespace igtl
 
 
