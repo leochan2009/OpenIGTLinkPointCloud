@@ -285,7 +285,6 @@ class IGTLCommon_EXPORT PolyDataAttribute : public Object {
 
 };
 
-
 /// A class for the POLYDATA message type.
 class IGTLCommon_EXPORT PolyDataMessage: public MessageBase
 {
@@ -339,6 +338,11 @@ public:
   /// Adds an attribute.
   void AddAttribute(PolyDataAttribute * att);
 
+  /// Adds an RGB for the data.
+  void SetPointsRGB(std::vector<igtlUint8> pointsRGB);
+
+  int GetNumberOfPointsRGB();
+
   /// Gets the number of attributes.
   int  GetNumberOfAttributes();
 
@@ -373,6 +377,8 @@ protected:
   /// A list of pointers to the attributes.
   std::vector<PolyDataAttribute::Pointer> m_Attributes;
 
+  /// RGB data pointer
+  std::vector<igtlUint8> m_PointsRGB;
 };
 
 } // namespace igtl

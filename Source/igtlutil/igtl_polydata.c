@@ -33,12 +33,14 @@ void igtl_export igtl_polydata_init_info(igtl_polydata_info * info)
     info->header.ntriangle_strips = 0;
     info->header.size_triangle_strips = 0;
     info->header.nattributes = 0;
+    info->header.nPointsRGB = 0;
     info->points = NULL;
     info->vertices = NULL;
     info->lines = NULL;
     info->polygons = NULL;
     info->triangle_strips = NULL;
     info->attributes = NULL;
+    info->pointsRGB = NULL;
     }
 }
 
@@ -159,7 +161,20 @@ int igtl_export igtl_polydata_alloc_info(igtl_polydata_info * info)
       info->attributes[i].data = NULL;
       }
     }
-
+  /** Points RGB information **/
+  if (info->pointsRGB)
+  {
+    free(info->pointsRGB);
+    info->pointsRGB = NULL;
+  }
+  if (info->header.nPointsRGB > 0)
+  {
+    info->pointsRGB = malloc(info->header.nPointsRGB * sizeof(igtl_uint8) * 3);
+    if (info->pointsRGB == NULL)
+    {
+      return 0;
+    }
+  }
   return 1;
   
 }
@@ -226,6 +241,12 @@ int igtl_export igtl_polydata_free_info(igtl_polydata_info * info)
     free(info->attributes);
     }
 
+  /** Points RGB **/
+  if (info->pointsRGB)
+  {
+    free(info->pointsRGB);
+    info->pointsRGB = NULL;
+  }
   return 1;
 
 }
@@ -310,6 +331,7 @@ int igtl_export igtl_polydata_unpack(int type, void * byte_array, igtl_polydata_
     info->header.ntriangle_strips     = BYTE_SWAP_INT32(header->ntriangle_strips);
     info->header.size_triangle_strips = BYTE_SWAP_INT32(header->size_triangle_strips);
     info->header.nattributes          = BYTE_SWAP_INT32(header->nattributes);
+    info->header.nPointsRGB           = BYTE_SWAP_INT32(header->nPointsRGB);
     }
   else
     {
@@ -433,6 +455,11 @@ int igtl_export igtl_polydata_unpack(int type, void * byte_array, igtl_polydata_
       n = 3 * info->attributes[i].n;
       s = n * sizeof(igtl_float32);
       }
+    else if (info->attributes[i].type == IGTL_POLY_ATTR_TYPE_RGBA)
+    {
+      n = 4 * info->attributes[i].n;
+      s = n * sizeof(igtl_float32);
+    }
     else /* TENSOR */
       {
       n = 9 * info->attributes[i].n;
@@ -451,6 +478,8 @@ int igtl_export igtl_polydata_unpack(int type, void * byte_array, igtl_polydata_
     ptr += s;
     }
 
+  /*RGB color of the point*/
+  memcpy(info->pointsRGB, ptr, sizeof(igtl_uint8)*info->header.nPointsRGB*3);
   return 1;
 }
 
@@ -495,6 +524,7 @@ int igtl_export igtl_polydata_pack(igtl_polydata_info * info, void * byte_array,
     header->ntriangle_strips     = BYTE_SWAP_INT32(info->header.ntriangle_strips);
     header->size_triangle_strips = BYTE_SWAP_INT32(info->header.size_triangle_strips);
     header->nattributes          = BYTE_SWAP_INT32(info->header.nattributes);
+    header->nPointsRGB           = BYTE_SWAP_INT32(info->header.nPointsRGB);
     }
   else
     {
@@ -625,6 +655,11 @@ int igtl_export igtl_polydata_pack(igtl_polydata_info * info, void * byte_array,
       n = 3 * info->attributes[i].n;
       size = n * sizeof(igtl_float32);
       }
+    else if (info->attributes[i].type == IGTL_POLY_ATTR_TYPE_RGBA)
+    {
+      n = 4 * info->attributes[i].n;
+      size = n * sizeof(igtl_float32);
+    }
     else /* TENSOR */
       {
       n = 9 * info->attributes[i].n;
@@ -648,7 +683,7 @@ int igtl_export igtl_polydata_pack(igtl_polydata_info * info, void * byte_array,
       }
     ptr += size;
     }
-
+  memcpy((void*)ptr, (void*)info->pointsRGB, sizeof(igtl_uint8)*info->header.nPointsRGB * 3);
   return 1;
 }
 
@@ -718,7 +753,8 @@ igtl_uint64 igtl_export igtl_polydata_get_size(igtl_polydata_info * info, int ty
       }
     data_size += size;
     }
-
+  /* POINT RGB Color section */
+  data_size += sizeof(igtl_uint8)*info->header.nPointsRGB * 3;
   return data_size;
 }
 

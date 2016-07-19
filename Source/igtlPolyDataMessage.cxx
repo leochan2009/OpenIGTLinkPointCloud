@@ -491,7 +491,7 @@ void IGTLCommon_EXPORT SetPolyDataInfo(igtl_polydata_info * info, PolyDataMessag
     }
 
   info->header.nattributes = pdm->GetNumberOfAttributes();
-
+  info->header.nPointsRGB = pdm->GetNumberOfPointsRGB();
 }
 
 
@@ -691,6 +691,16 @@ int PolyDataMessage::PackBody()
     }
 
   SetPolyDataInfoAttribute(&info, this);
+  //TriangleStrips
+  if (info.pointsRGB)
+  {
+    igtlUint8 * ptr_i = info.pointsRGB;
+    for (unsigned int i = 0; i < this->m_PointsRGB.size(); i++)
+    {
+      *ptr_i = this->m_PointsRGB[i];
+      ptr_i++;
+    }
+  }
 
   igtl_polydata_pack(&info, this->m_Body, IGTL_TYPE_PREFIX_NONE);
   igtl_polydata_free_info(&info);
@@ -806,7 +816,20 @@ int PolyDataMessage::UnpackBody()
       this->m_Attributes.push_back(pda);
       }
     }
-
+  // Points RGB
+  this->m_PointsRGB.clear();
+  if (info.header.nPointsRGB > 0)
+  {
+    for (unsigned int i = 0; i < info.header.nPointsRGB; i++)
+    {
+      this->m_PointsRGB.push_back(*info.pointsRGB);
+      info.pointsRGB++;
+      this->m_PointsRGB.push_back(*info.pointsRGB);
+      info.pointsRGB++;
+      this->m_PointsRGB.push_back(*info.pointsRGB);
+      info.pointsRGB++;
+    }
+  }
 
   return 1;
 }
@@ -842,6 +865,7 @@ void PolyDataMessage::Clear()
     }
   // TODO: is this OK?
   this->m_Attributes.clear();
+  this->m_PointsRGB.clear();
 }
 
 void PolyDataMessage::ClearAttributes()
@@ -857,6 +881,16 @@ void PolyDataMessage::ClearAttributes()
 void PolyDataMessage::AddAttribute(PolyDataAttribute * att)
 {
   this->m_Attributes.push_back(att);
+}
+
+void PolyDataMessage::SetPointsRGB(std::vector<igtlUint8> pointsRGB)
+{
+  this->m_PointsRGB.swap(pointsRGB);
+}
+
+int PolyDataMessage::GetNumberOfPointsRGB()
+{
+  return this->m_PointsRGB.size()/3;
 }
 
 int PolyDataMessage::GetNumberOfAttributes()

@@ -54,6 +54,7 @@ typedef struct {
   igtl_uint32      size_triangle_strips;     /* Size of triangle strips data (bytes) */
 
   igtl_uint32      nattributes;              /* Number of attributes */
+  igtl_uint32      nPointsRGB;               /* Number of RGB */
 } igtl_polydata_header;
 
 
@@ -93,6 +94,7 @@ typedef struct {
   igtl_uint32 *          polygons;           /* Polygons -- array of (N, i1, i2, i3 ...iN) */
   igtl_uint32 *          triangle_strips;    /* Triangle strips -- array of (N, i1, i2, i3 ...iN) */
   igtl_polydata_attribute * attributes; /* Array of attributes */
+  igtl_uint8 *              pointsRGB; /* Array of points RGB */
 } igtl_polydata_info;
 
 
