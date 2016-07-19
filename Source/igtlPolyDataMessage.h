@@ -331,7 +331,7 @@ public:
 
   /// Gets an array of triangle strips.
   igtlGetObjectMacro(TriangleStrips, PolyDataCellArray);
-
+  
   /// Clears the attributes.
   void ClearAttributes();
 
@@ -340,6 +340,9 @@ public:
 
   /// Adds an RGB for the data.
   void SetPointsRGB(std::vector<igtlUint8> pointsRGB);
+  
+  /// Adds an RGB for the data.
+  std::vector<igtlUint8> GetPointsRGB();
 
   int GetNumberOfPointsRGB();
 

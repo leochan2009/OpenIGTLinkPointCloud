@@ -887,6 +887,11 @@ void PolyDataMessage::SetPointsRGB(std::vector<igtlUint8> pointsRGB)
 {
   this->m_PointsRGB.swap(pointsRGB);
 }
+  
+std::vector<igtlUint8> PolyDataMessage::GetPointsRGB()
+{
+  return this->m_PointsRGB;
+}
 
 int PolyDataMessage::GetNumberOfPointsRGB()
 {
